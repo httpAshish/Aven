@@ -1,0 +1,58 @@
+/* AVEN additions — layered on top of custom.css (Nexora base) */
+html{scroll-padding-top:84px}
+.brand-logo{height:44px;width:auto;display:block}
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#EAF4FF 0%,#F5F8FC 70%,#fff 100%)}
+.hero-shape{position:absolute;border-radius:50%;pointer-events:none}
+.hero-shape-1{width:520px;height:520px;right:-160px;top:-120px;background:radial-gradient(circle,rgba(66,169,239,.28),transparent 70%)}
+.hero-shape-2{width:380px;height:380px;left:-140px;bottom:-140px;background:radial-gradient(circle,rgba(7,86,185,.14),transparent 70%)}
+.eyebrow-light{background:rgba(255,255,255,.12)!important;color:#BFE3FF!important}
+.navbar-nexora .nav-link.active{color:var(--n-primary)!important}
+
+/* Image slots: show a labelled placeholder until the real photo exists */
+.img-slot{position:relative;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#EAF4FF,#D6E9FB);aspect-ratio:8/9;box-shadow:var(--n-shadow-lg)}
+.img-slot-tall{aspect-ratio:5/6}
+.img-slot-wide{aspect-ratio:5/2}
+.img-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.img-slot.missing img{display:none}
+.img-slot.missing::after{content:"Add photo: " attr(data-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5rem;color:#0756B9;font-weight:600;border:2px dashed #42A9EF;border-radius:20px}
+
+/* Steps */
+.steps-row{position:relative}
+.step-card{position:relative;background:#fff;border-radius:20px;padding:1.75rem 1.5rem;height:100%;box-shadow:var(--n-shadow-sm);border:1px solid var(--n-border);transition:transform .25s,box-shadow .25s}
+.step-card:hover{transform:translateY(-6px);box-shadow:var(--n-shadow-lg)}
+.step-num{position:absolute;top:1rem;right:1.25rem;font:800 1.6rem var(--n-font-display);color:#D6E9FB}
+.small-caps{font-size:.72rem;letter-spacing:.08em;color:var(--n-primary)}
+@media(min-width:1200px){.steps-row::before{content:"";position:absolute;left:8%;right:8%;top:3.4rem;height:3px;background:linear-gradient(90deg,#0756B9,#42A9EF);opacity:.25;z-index:0}.step-card{z-index:1}}
+
+.spec-box{background:var(--n-bg-alt);border-radius:16px;padding:1.25rem 1.5rem}
+.spec-box dt{color:var(--n-navy)}
+.loc-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--n-border);box-shadow:var(--n-shadow-sm);transition:transform .25s,box-shadow .25s}
+.loc-card:hover{transform:translateY(-6px);box-shadow:var(--n-shadow-lg)}
+.loc-visual{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;color:#fff;background:linear-gradient(135deg,#07172F,#0756B9 70%,#42A9EF)}
+.biz-card{border-top:3px solid var(--n-primary)}
+
+.partner-wrap{background:linear-gradient(135deg,#07172F,#0B2A55);border-radius:28px;padding:clamp(1.5rem,4vw,3.5rem)}
+.partner-list li{color:#DCEBFA;font-size:.95rem}.partner-list i{color:#42A9EF;margin-right:.4rem}
+.form-card{background:#fff;border-radius:20px;padding:clamp(1.25rem,3vw,2rem);box-shadow:var(--n-shadow-md);color:var(--n-slate)}
+.form-status{font-size:.92rem}
+.form-status.info{color:#0756B9}.form-status.ok{color:#12B76A}.form-status.err{color:#B42318}
+
+/* Team */
+.team-group-title{font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--n-primary);text-align:center;margin-bottom:1.5rem}
+.team-card{background:#fff;border-radius:20px;overflow:hidden;height:100%;border:1px solid var(--n-border);box-shadow:var(--n-shadow-sm);transition:transform .25s,box-shadow .25s}
+.team-card:hover{transform:translateY(-6px);box-shadow:var(--n-shadow-lg)}
+.team-photo{aspect-ratio:4/4.4;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0756B9,#42A9EF);overflow:hidden}
+.team-photo img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.team-initials{font:700 3rem var(--n-font-display);color:#fff;letter-spacing:.04em}
+.team-card-lead .team-photo{background:linear-gradient(135deg,#07172F,#0756B9)}
+.team-body{padding:1.25rem 1.25rem 1.5rem}
+.team-no{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--n-slate-light)}
+.team-role{color:var(--n-primary);font-weight:600;font-size:.9rem}
+.team-desc{font-size:.88rem;line-height:1.6}
+
+.contact-list li{display:flex;gap:1rem;margin-bottom:1.25rem}
+.contact-list i{font-size:1.3rem;color:var(--n-primary)}
+.placeholder-text{color:#B54708;background:#FFFAEB;border-radius:6px;padding:0 .4rem;font-size:.92rem}
+.footer-nexora .placeholder-text{background:rgba(255,255,255,.08);color:#FEC84B}
+.cta-section{background:var(--n-gradient-primary);padding:4rem 0}
+@media(max-width:575.98px){.brand-logo{height:38px}.team-initials{font-size:2.4rem}}
