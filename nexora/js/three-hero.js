@@ -246,17 +246,22 @@
     }
     animate();
 
-    // Resize
-    window.addEventListener('resize', () => {
+    // Resize (Window + ResizeObserver for smooth DevTools / Mobile responsiveness)
+    const handleResize = () => {
       const newW = container.clientWidth;
       const newH = container.clientHeight;
       if (newW && newH) {
         camera.aspect = newW / newH;
         camera.updateProjectionMatrix();
-        renderer.setSize(newW, newH);
+        renderer.setSize(newW, newH, false);
         requestWakeup(15);
       }
-    });
+    };
+    window.addEventListener('resize', handleResize);
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(handleResize);
+      ro.observe(container);
+    }
   }
 
   if (document.readyState === 'loading') {

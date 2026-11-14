@@ -41,13 +41,13 @@
           class="bar"></span><span class="bar"></span><span class="bar"></span></button>
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-1 mt-3 mt-lg-0">
-          <li class="nav-item"><a class="nav-link nav2" href="#home">Home</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="#about">About Us</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="#how-it-works">How It Works</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="#product">Our Product</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="#solutions">Solutions</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="#team">Our Team</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="#contact">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+          <li class="nav-item"><a class="nav-link" href="#product">Our Product</a></li>
+          <li class="nav-item"><a class="nav-link" href="#solutions">Solutions</a></li>
+          <li class="nav-item"><a class="nav-link" href="#team">Our Team</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
           <li class="nav-item ms-lg-2 mt-2 mt-lg-0"><a href="#partner"
               class="btn btn-primary btn-sm-custom w-100">Become a Partner</a></li>
         </ul>
@@ -77,17 +77,14 @@
           </div>
           <div class="col-lg-6">
             <!-- 3D Interactive Three.js Model in Hero Section -->
-            <div class="model-3d-card position-relative mx-auto" id="three-hero-container"
-              style="max-width:480px; height:520px; border-radius:24px; background:radial-gradient(circle at 50% 40%, #ffffff 0%, #EAF4FF 100%); box-shadow:0 20px 50px rgba(7, 86, 185, 0.12); border:1px solid rgba(66, 169, 239, 0.25); overflow:hidden; cursor:grab;">
+            <div class="model-3d-card position-relative mx-auto" id="three-hero-container">
 
               <!-- Three.js Canvas Mount Wrap -->
-              <div id="three-canvas-wrap" style="width:100%; height:100%;"></div>
+              <div id="three-canvas-wrap"></div>
 
               <!-- 3D Interaction Control Hint -->
-              <div
-                class="position-absolute bottom-0 start-50 translate-middle-x mb-3 px-3 py-2 bg-white rounded-pill shadow-sm d-flex align-items-center gap-2"
-                style="font-size:0.8rem; font-weight:600; color:#0756B9; border:1px solid #D6E9FB; pointer-events:none; white-space:nowrap; z-index:10;">
-                <i class="bi bi-arrows-move"></i> 3D View &bull; Drag to Rotate &bull; Scroll to Zoom
+              <div class="hero-3d-hint">
+                <i class="bi bi-arrows-move"></i> <span>3D View &bull; Drag to Rotate &bull; Scroll to Zoom</span>
               </div>
             </div>
           </div>
@@ -100,13 +97,11 @@
       <div class="container">
         <div class="row align-items-center gy-5">
           <div class="col-lg-5 reveal">
-            <!-- About AVEN Lifestyle Photo -->
+            <!-- About AVEN Illustration -->
             <div class="about-img-wrap"
-              style="border-radius:24px; overflow:hidden; box-shadow:0 20px 50px rgba(7, 86, 185, 0.12); border:1px solid rgba(66, 169, 239, 0.25);">
-              <img
-                src="../../../.gemini/antigravity/brain/926131d7-aae9-4180-88e1-21ae61e657da/aven_about_us_lifestyle_1794643962197.jpg"
-                alt="Students staying connected with AVEN portable charging" loading="lazy"
-                style="width:100%; height:auto; display:block;" onerror="this.src='assets/img/aven-team-demo.jpg';">
+              style="border-radius:24px; overflow:hidden; box-shadow:0 20px 50px rgba(7, 86, 185, 0.12); border:1px solid rgba(66, 169, 239, 0.25); background:#ffffff;">
+              <img src="assets/img/aven-about.svg" alt="AVEN Smart Power Bank Rental Network Ecosystem" loading="lazy"
+                width="800" height="680" style="width:100%; height:auto; display:block;">
             </div>
           </div>
           <div class="col-lg-7 reveal">
@@ -229,10 +224,9 @@
             <!-- AVEN Smart Power Bank Product Photo -->
             <div class="product-img-card p-3 text-center"
               style="border-radius:24px; background:#ffffff; box-shadow:0 20px 50px rgba(7, 86, 185, 0.10); border:1px solid rgba(66, 169, 239, 0.25);">
-              <img src="assets/img/aven-powerbank.jpg" alt="AVEN Smart Power Bank - Portable 10,000mAh Charger"
-                loading="lazy" width="800" height="800"
-                style="width:100%; height:auto; max-height:460px; object-fit:contain; display:block; border-radius:16px;"
-                onerror="this.onerror=null; this.src='../../../.gemini/antigravity/brain/926131d7-aae9-4180-88e1-21ae61e657da/aven_power_bank_commercial_1794643230205.jpg';">
+              <img src="assets/img/aven-powerbank.svg" alt="AVEN Smart Power Bank - Portable Charger" loading="lazy"
+                width="800" height="800"
+                style="width:100%; height:auto; max-height:480px; object-fit:contain; display:block; border-radius:16px;">
             </div>
           </div>
           <div class="col-lg-7">
@@ -274,7 +268,7 @@
               </div>
               <div class="col-sm-6 reveal">
                 <div class="d-flex gap-3">
-                  <div class="icon-box icon-box-primary flex-shrink-0"><i class="bi bi-flashlight"></i></div>
+                  <div class="icon-box icon-box-primary flex-shrink-0"><i class="bi bi-brightness-high"></i></div>
                   <div>
                     <h3 class="h6 mb-1">Built-in Torchlight</h3>
                     <p class="mb-0 small">An additional utility feature for low-light situations.</p>
