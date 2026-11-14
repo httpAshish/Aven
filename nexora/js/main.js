@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------- Form validation (no backend: never fakes a success) ---------- */
+  /* ---------- Form validation & Email Submission (FormSubmit.co) ---------- */
   document.querySelectorAll('.needs-validation').forEach(form => {
     const status = form.querySelector('.form-status');
     const say = (msg, cls) => { if (status) { status.textContent = msg; status.className = 'form-status mt-3 ' + cls; } };
@@ -90,15 +90,28 @@ document.addEventListener('DOMContentLoaded', function () {
       form.classList.add('was-validated');
       if (!form.checkValidity()) { say('Please fix the highlighted fields.', 'err'); return; }
       const endpoint = form.dataset.formEndpoint;
-      if (!endpoint) { say('This form is not connected to a backend yet, so nothing was sent. Please use the contact details above once they are published.', 'info'); return; }
+      if (!endpoint) { say('Please email us directly at teamaven2005@gmail.com.', 'info'); return; }
       const btn = form.querySelector('button[type="submit"]');
+      const origText = btn.innerHTML;
       btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Sending…';
       try {
-        const res = await fetch(endpoint, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) });
+        const formData = new FormData(form);
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        });
         if (!res.ok) throw new Error(res.status);
-        say('Thank you — your message has been sent.', 'ok'); form.reset(); form.classList.remove('was-validated');
-      } catch (err) { say('Sorry, we could not send your message. Please try again later.', 'err'); }
-      btn.disabled = false;
+        say('✅ Thank you! Your message has been sent successfully. We will get back to you shortly.', 'ok');
+        form.reset();
+        form.classList.remove('was-validated');
+      } catch (err) {
+        say('Unable to send at this moment. Please email us directly at teamaven2005@gmail.com or call +91 74056 86979.', 'err');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      }
     });
   });
 
@@ -112,8 +125,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const C = window.AVEN_CONFIG || {};
   const ct = C.contact || {};
   document.querySelectorAll('[data-config]').forEach(el => {
-    const v = ct[el.dataset.config];
-    if (v) { el.textContent = v; el.classList.remove('placeholder-text'); }
+    const key = el.dataset.config;
+    const v = ct[key];
+    if (v) {
+      el.textContent = v;
+      el.classList.remove('placeholder-text');
+      if (key === 'email' && el.tagName !== 'A') {
+        el.innerHTML = `<a href="mailto:${v}" class="text-decoration-none">${v}</a>`;
+      } else if (key === 'phone' && el.tagName !== 'A') {
+        const tel = v.replace(/[^0-9+]/g, '');
+        el.innerHTML = `<a href="tel:${tel}" class="text-decoration-none">${v}</a>`;
+      }
+    }
   });
   document.querySelectorAll('[data-social]').forEach(a => {
     const v = (C.social || {})[a.dataset.social];
@@ -125,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   const cap = document.querySelector('[data-spec="capacity"]');
   if (cap && C.batteryCapacity) cap.textContent = C.batteryCapacity;
-  const st = C.stats || {}, keys = ['stations','powerbanks','customers','partners'];
+  const st = C.stats || {}, keys = ['stations', 'powerbanks', 'customers', 'partners'];
   if (keys.every(k => st[k])) {
     keys.forEach(k => { const el = document.querySelector('[data-stat="' + k + '"]'); if (el) el.textContent = st[k]; });
     const sec = document.getElementById('stats'); if (sec) sec.hidden = false;

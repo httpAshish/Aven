@@ -55,4 +55,8 @@ html{scroll-padding-top:84px}
 .placeholder-text{color:#B54708;background:#FFFAEB;border-radius:6px;padding:0 .4rem;font-size:.92rem}
 .footer-nexora .placeholder-text{background:rgba(255,255,255,.08);color:#FEC84B}
 .cta-section{background:var(--n-gradient-primary);padding:4rem 0}
+/* 3D Model Viewer Card */
+.model-3d-card{transition:box-shadow .3s ease,transform .3s ease}
+.model-3d-card:hover{box-shadow:0 25px 60px rgba(7,86,185,.18);transform:translateY(-4px)}
+#three-canvas-wrap canvas{display:block;width:100%!important;height:100%!important;outline:none}
 @media(max-width:575.98px){.brand-logo{height:38px}.team-initials{font-size:2.4rem}}

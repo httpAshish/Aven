@@ -1,1 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" role="img" aria-label="AVEN"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0756B9"/><stop offset="1" stop-color="#42A9EF"/></linearGradient></defs><path d="M10 56 L30 8 H40 L60 56 H48 L35 22 L22 56 Z" fill="url(#g)"/><path d="M18 44 Q40 38 64 20" stroke="#42A9EF" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="58" cy="14" r="5" fill="#0756B9"/><text x="76" y="44" font-family="Poppins,Arial,sans-serif" font-weight="700" font-size="34" letter-spacing="2" fill="#FFFFFF">AVEN</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 64" role="img" aria-label="AVEN - Power. On Your Way.">
+  <defs>
+    <linearGradient id="avenBlueLight1" x1="0%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#0A389C"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="avenBlueLight2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E75FF"/>
+      <stop offset="100%" stop-color="#0E4899"/>
+    </linearGradient>
+    <linearGradient id="waveGradLight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#7DD3FC"/>
+    </linearGradient>
+  </defs>
+  <!-- A Emblem Left Leg -->
+  <path d="M 12 56 L 31 8 L 41 8 L 22 56 Z" fill="url(#avenBlueLight1)"/>
+  <!-- A Emblem Right Leg -->
+  <path d="M 37 8 L 56 56 L 46 56 L 31 22 Z" fill="url(#avenBlueLight2)"/>
+  <!-- Curved Wave Swoosh -->
+  <path d="M 14 43 C 24 45, 33 32, 49 25" stroke="url(#waveGradLight)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <!-- Circular Node -->
+  <circle cx="56" cy="23" r="4.5" fill="#38BDF8"/>
+  <!-- Brand Wordmark -->
+  <text x="68" y="36" font-family="'Poppins','Montserrat',Arial,sans-serif" font-weight="800" font-size="28" letter-spacing="1.5" fill="#FFFFFF">AVEN</text>
+  <!-- Cyan Accent in A -->
+  <polygon points="76,32 72,38 80,38" fill="#38BDF8"/>
+  <!-- Tagline -->
+  <text x="69" y="51" font-family="'Inter',Arial,sans-serif" font-weight="500" font-size="9.5" letter-spacing="1.6" fill="#94A3B8">Power. On Your Way.</text>
+</svg>
