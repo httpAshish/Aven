@@ -319,17 +319,57 @@ footer {
 }
 
 .contact-list li > i {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     background: #EAF4FF;
     font-size: 1.2rem;
     color: var(--n-primary);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     flex-shrink: 0;
-    line-height: 1;
+    line-height: 1 !important;
+    padding: 0 !important;
+}
+
+.contact-social-btn {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 1.5px solid var(--n-primary) !important;
+    background: #ffffff;
+    color: var(--n-primary) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(7, 86, 185, 0.08);
+}
+
+.contact-social-btn i {
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.contact-social-btn:hover {
+    background: var(--n-gradient-primary) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(7, 86, 185, 0.25);
+}
+
+.section-header.text-center .section-subtitle {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
 }
 
 /* Ensure all icons across cards, buttons, and footer are perfectly centered */

@@ -92,48 +92,107 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------- Form validation & Direct Email Delivery (FormSubmit.co) ---------- */
+  /* ---------- Form validation & Direct Email Delivery ---------- */
   document.querySelectorAll('.needs-validation').forEach(form => {
     const status = form.querySelector('.form-status');
-    const say = (msg, cls) => { if (status) { status.innerHTML = msg; status.className = 'form-status mt-3 ' + cls; } };
+    const say = (msg, cls) => {
+      if (status) {
+        status.innerHTML = msg;
+        status.className = 'form-status mt-3 ' + cls;
+      }
+    };
+
+    const buildGmailUrl = (dataObj) => {
+      const to = 'teamaven2005@gmail.com';
+      const cc = 'utsavvaja07@gmail.com';
+      const subject = dataObj._subject || dataObj.Subject || 'New Enquiry | AVEN Website';
+      const lines = [];
+      Object.entries(dataObj).forEach(([k, v]) => {
+        if (!k.startsWith('_') && k !== 'form-name' && v) {
+          lines.push(`${k.replace(/_/g, ' ')}: ${v}`);
+        }
+      });
+      const body = lines.join('\n') + '\n\n---\nSent via AVEN Website';
+      return {
+        gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+        mailto: `mailto:${to}?cc=${encodeURIComponent(cc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      };
+    };
 
     form.addEventListener('submit', async function (e) {
+      e.preventDefault();
       form.classList.add('was-validated');
       if (!form.checkValidity()) {
-        e.preventDefault();
-        say('Please fix the highlighted fields.', 'err');
+        say('Please fill in all required fields correctly.', 'err');
         return;
       }
 
-      // If running locally via file:// protocol, browsers block AJAX due to CORS.
-      // So submit natively via HTML Form POST directly to FormSubmit!
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      const links = buildGmailUrl(payload);
+
+      // Note: FormSubmit.co blocks requests coming from local file:// protocol (Origin: null).
+      // If opened via file://, open pre-filled Gmail / Mail client directly so local testing works immediately.
       if (window.location.protocol === 'file:') {
-        say('🚀 Sending your message to teamaven2005@gmail.com…', 'info');
-        return; // Allow standard form submission to proceed without error!
+        window.open(links.gmail, '_blank', 'noopener');
+        say(
+          '✅ Local <code>file://</code> mode detected — opened <strong>Gmail Compose</strong> pre-filled for <strong>teamaven2005@gmail.com</strong>! ' +
+          '(Once pushed to <a href="https://avenpower.netlify.app" target="_blank">avenpower.netlify.app</a>, emails send automatically in the background). ' +
+          '<a href="' + links.mailto + '" class="fw-semibold ms-1">Open Default Mail App</a>',
+          'ok'
+        );
+        form.reset();
+        form.classList.remove('was-validated');
+        return;
       }
 
-      // If running on a web server (Netlify/Live Server), use smooth AJAX
-      e.preventDefault();
       const btn = form.querySelector('button[type="submit"]');
       const origText = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Sending…';
 
       try {
-        const formData = new FormData(form);
-        const res = await fetch(form.action || 'https://formsubmit.co/ajax/teamaven2005@gmail.com', {
+        const endpoint = form.dataset.formEndpoint || 'https://formsubmit.co/ajax/teamaven2005@gmail.com';
+        const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Accept': 'application/json' },
-          body: formData
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
         });
         const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(json.message || res.status);
-        say('✅ Thank you! Your message has been sent successfully to teamaven2005@gmail.com. We will get back to you shortly.', 'ok');
+
+        if (!res.ok || json.success === 'false' || json.success === false) {
+          const msg = json.message || '';
+          if (msg.toLowerCase().includes('activate') || msg.toLowerCase().includes('activation')) {
+            say(
+              '📩 <strong>One-Time Activation Required:</strong> FormSubmit has sent an <strong>"Activate Form"</strong> email to <strong>teamaven2005@gmail.com</strong> (check Inbox &amp; Spam folder). Click <em>Activate Form</em> in that email once to enable automatic emails! Meanwhile, <a href="' + links.gmail + '" target="_blank" class="fw-bold">click here to send via Gmail</a>.',
+              'info'
+            );
+          } else {
+            window.open(links.gmail, '_blank', 'noopener');
+            say(
+              '✅ Opened <strong>Gmail</strong> pre-filled to <strong>teamaven2005@gmail.com</strong>! (<a href="' + links.mailto + '">Or use Mail App</a>)',
+              'ok'
+            );
+          }
+          form.reset();
+          form.classList.remove('was-validated');
+          return;
+        }
+
+        say('✅ Thank you! Your message has been sent successfully to <strong>teamaven2005@gmail.com</strong>. We will get back to you shortly.', 'ok');
         form.reset();
         form.classList.remove('was-validated');
       } catch (err) {
-        // Fallback: Submit form natively
-        form.submit();
+        window.open(links.gmail, '_blank', 'noopener');
+        say(
+          '✅ Opened <strong>Gmail</strong> pre-filled to <strong>teamaven2005@gmail.com</strong>! (<a href="' + links.mailto + '">Or use Mail App</a>)',
+          'ok'
+        );
+        form.reset();
+        form.classList.remove('was-validated');
       } finally {
         btn.disabled = false;
         btn.innerHTML = origText;
