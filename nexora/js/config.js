@@ -6,7 +6,12 @@ window.AVEN_CONFIG = {
     phone: "+91 74056 86979",
     address: "Gate No. 2, Sarva Vidyalaya Campus, Sector-23, Near GH-6 Circle, Gandhinagar, Gujarat 382023, India"
   },          // real, verified details only
-  social: { instagram: "", linkedin: "", facebook: "", youtube: "" },  // full profile URLs
+  social: {
+    instagram: "https://www.instagram.com/____aven_______?utm_source=qr&rpxt=anV5ZjFzdzIxM283",
+    linkedin: "https://www.linkedin.com/public-profile/settings/",
+    facebook: "",
+    youtube: ""
+  },  // full profile URLs
   whatsapp: "917405686979",                                             // e.g. "919XXXXXXXXX" — button only appears if set
   batteryCapacity: "",                                      // e.g. "10,000 mAh" — shown only once verified
   stats: { stations: "", powerbanks: "", customers: "", partners: "" }, // section appears only when ALL are filled

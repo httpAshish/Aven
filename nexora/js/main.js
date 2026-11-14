@@ -6,15 +6,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ---------- Sticky navbar on scroll ---------- */
   const navbar = document.querySelector('.navbar-nexora');
-  const handleScroll = () => {
-    if (window.scrollY > 40) {
-      navbar?.classList.add('scrolled');
-    } else {
-      navbar?.classList.remove('scrolled');
+  const backToTop = document.querySelector('.back-to-top');
+  const links = [...document.querySelectorAll('.navbar-nexora .nav-link')];
+  const map = links.map(l => [l, document.querySelector(l.getAttribute('href'))]).filter(x => x[1]);
+
+  let scrollTicking = false;
+  const onScroll = () => {
+    if (!scrollTicking) {
+      window.requestAnimationFrame(() => {
+        const sy = window.scrollY;
+        // 1. Sticky navbar
+        if (sy > 40) { navbar?.classList.add('scrolled'); } else { navbar?.classList.remove('scrolled'); }
+        // 2. Back to top button
+        if (backToTop) { backToTop.classList.toggle('show', sy > 400); }
+        // 3. Active nav spy
+        const y = sy + 140; let cur = null;
+        map.forEach(([l, sec]) => { if (sec.offsetTop <= y) cur = l; });
+        links.forEach(l => l.classList.toggle('active', l === cur));
+        scrollTicking = false;
+      });
+      scrollTicking = true;
     }
   };
-  window.addEventListener('scroll', handleScroll);
-  handleScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   /* ---------- Mobile menu toggle animation ---------- */
   const toggler = document.querySelector('.navbar-toggler-custom');
@@ -70,44 +85,55 @@ document.addEventListener('DOMContentLoaded', function () {
     revealEls.forEach(el => el.classList.add('is-visible'));
   }
 
-  /* ---------- Back to top button ---------- */
-  const backToTop = document.querySelector('.back-to-top');
+  /* ---------- Back to top click handler ---------- */
   if (backToTop) {
-    window.addEventListener('scroll', () => {
-      backToTop.classList.toggle('show', window.scrollY > 400);
-    });
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  /* ---------- Form validation & Email Submission (FormSubmit.co) ---------- */
+  /* ---------- Form validation & Direct Email Delivery (FormSubmit.co) ---------- */
   document.querySelectorAll('.needs-validation').forEach(form => {
     const status = form.querySelector('.form-status');
-    const say = (msg, cls) => { if (status) { status.textContent = msg; status.className = 'form-status mt-3 ' + cls; } };
+    const say = (msg, cls) => { if (status) { status.innerHTML = msg; status.className = 'form-status mt-3 ' + cls; } };
+
     form.addEventListener('submit', async function (e) {
-      e.preventDefault();
       form.classList.add('was-validated');
-      if (!form.checkValidity()) { say('Please fix the highlighted fields.', 'err'); return; }
-      const endpoint = form.dataset.formEndpoint;
-      if (!endpoint) { say('Please email us directly at teamaven2005@gmail.com.', 'info'); return; }
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        say('Please fix the highlighted fields.', 'err');
+        return;
+      }
+
+      // If running locally via file:// protocol, browsers block AJAX due to CORS.
+      // So submit natively via HTML Form POST directly to FormSubmit!
+      if (window.location.protocol === 'file:') {
+        say('🚀 Sending your message to teamaven2005@gmail.com…', 'info');
+        return; // Allow standard form submission to proceed without error!
+      }
+
+      // If running on a web server (Netlify/Live Server), use smooth AJAX
+      e.preventDefault();
       const btn = form.querySelector('button[type="submit"]');
       const origText = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Sending…';
+
       try {
         const formData = new FormData(form);
-        const res = await fetch(endpoint, {
+        const res = await fetch(form.action || 'https://formsubmit.co/ajax/teamaven2005@gmail.com', {
           method: 'POST',
           headers: { 'Accept': 'application/json' },
           body: formData
         });
-        if (!res.ok) throw new Error(res.status);
-        say('✅ Thank you! Your message has been sent successfully. We will get back to you shortly.', 'ok');
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.message || res.status);
+        say('✅ Thank you! Your message has been sent successfully to teamaven2005@gmail.com. We will get back to you shortly.', 'ok');
         form.reset();
         form.classList.remove('was-validated');
       } catch (err) {
-        say('Unable to send at this moment. Please email us directly at teamaven2005@gmail.com or call +91 74056 86979.', 'err');
+        // Fallback: Submit form natively
+        form.submit();
       } finally {
         btn.disabled = false;
         btn.innerHTML = origText;
@@ -160,15 +186,5 @@ document.addEventListener('DOMContentLoaded', function () {
     w.setAttribute('aria-label', 'Chat on WhatsApp'); w.innerHTML = '<i class="bi bi-whatsapp"></i>';
     document.body.appendChild(w);
   }
-
-  /* ---------- Active nav link via scroll position ---------- */
-  const links = [...document.querySelectorAll('.navbar-nexora .nav-link')];
-  const map = links.map(l => [l, document.querySelector(l.getAttribute('href'))]).filter(x => x[1]);
-  const spy = () => {
-    const y = window.scrollY + 140; let cur = null;
-    map.forEach(([l, sec]) => { if (sec.offsetTop <= y) cur = l; });
-    links.forEach(l => l.classList.toggle('active', l === cur));
-  };
-  window.addEventListener('scroll', spy, { passive: true }); spy();
 
 });

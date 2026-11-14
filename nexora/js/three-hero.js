@@ -1,6 +1,6 @@
 /* =====================================================
    AVEN — Ultra-Lightweight Three.js 3D Hero Scene
-   Guaranteed Render & Zero Lag (60 FPS, PixelRatio: 1)
+   Guaranteed Render & Zero Lag (On-Demand + Viewport Aware)
    ===================================================== */
 
 (function () {
@@ -18,7 +18,7 @@
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 50);
 
-    // Camera positioned straight, model turned in exact 3/4 angle
+    // Exact 3/4 isometric perspective matching reference angle
     camera.position.set(0, 0.25, 4.0);
     camera.lookAt(0, 0, 0);
 
@@ -26,17 +26,17 @@
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
-      powerPreference: 'high-performance'
+      powerPreference: 'low-power'
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(1); // Capped at 1 to eliminate Retina GPU lag completely
+    renderer.setPixelRatio(1); // Capped at 1 to eliminate GPU overhead on Retina screens
     container.appendChild(renderer.domElement);
 
     // 3. Smooth Orbit Controls
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-    controls.autoRotate = false; // Fixed angle, no unwanted spinning
+    controls.autoRotate = false; // Fixed angle, no unwanted rotation
     controls.enablePan = false;
     controls.minDistance = 2.2;
     controls.maxDistance = 6.0;
@@ -198,6 +198,7 @@
                 root.position.y += 0.08;
 
                 modelGroup.add(root);
+                requestWakeup(60);
               },
               err => console.error('Error parsing GLB:', err)
             );
@@ -208,12 +209,40 @@
     }
 
     // -----------------------------------------------------------
-    // Ultra-smooth 60 FPS Render Loop
+    // Intelligent On-Demand Rendering (0% Idle CPU Load)
     // -----------------------------------------------------------
+    let activeFrames = 90; // Initial render settle
+    let isVisible = true;
+
+    function requestWakeup(frames = 30) {
+      activeFrames = Math.max(activeFrames, frames);
+    }
+
+    // Wakeup on any user interaction with 3D canvas
+    controls.addEventListener('change', () => requestWakeup(30));
+    container.addEventListener('pointerdown', () => requestWakeup(60));
+    container.addEventListener('pointermove', (e) => { if (e.buttons > 0) requestWakeup(25); });
+    container.addEventListener('wheel', () => requestWakeup(30), { passive: true });
+
+    // Stop rendering completely when Hero section is out of viewport
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) requestWakeup(45);
+        });
+      }, { threshold: 0.05 });
+      observer.observe(container);
+    }
+
     function animate() {
       requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
+      if (!isVisible) return; // 0% CPU when scrolled away
+      if (activeFrames > 0) {
+        activeFrames--;
+        controls.update();
+        renderer.render(scene, camera);
+      }
     }
     animate();
 
@@ -225,6 +254,7 @@
         camera.aspect = newW / newH;
         camera.updateProjectionMatrix();
         renderer.setSize(newW, newH);
+        requestWakeup(15);
       }
     });
   }
